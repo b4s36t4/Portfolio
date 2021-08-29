@@ -1,0 +1,75 @@
+.header {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20%;
+  margin-left: 35%;
+  align-items: center;
+}
+
+.header > span {
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.header > span::after {
+  content: "";
+  display: block;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.705);
+  transition: all 0.3s ease-in-out;
+  /* padding-top: 1px; */
+}
+
+.header > span:hover::after {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.menuButton {
+  display: none;
+}
+
+@media only screen and (max-width: 800px) {
+  .header {
+    display: none;
+  }
+
+  .menuButton {
+    display: flex;
+    padding: 1rem 2rem;
+    flex-direction: row-reverse;
+    font-size: 30px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .headerMobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .headerMobile > span {
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    padding: 0.3rem;
+  }
+
+  .headerMobile > span::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background-color: rgba(0, 0, 0, 0.705);
+    transition: all 0.3s ease-in-out;
+    /* padding-top: 1px; */
+  }
+
+  .headerMobile > span:hover::after {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
