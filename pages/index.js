@@ -5,16 +5,16 @@ import {
   AiFillGithub,
   AiFillLinkedin,
   AiFillTwitterCircle,
-} from "react-icons/ai";
-import HashNode from "./components/hashnode";
+} from "react-icons/ai/index";
+import HashNode from "../components/hashnode";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import Link from "next/link";
 import { gql } from "@apollo/client";
-import { Client } from "./client";
+import { Client } from "../utils/client";
 import dayjs from "dayjs";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const AboutMeDescription = () => {
   return (
@@ -54,18 +54,6 @@ const AboutMeDescription = () => {
   );
 };
 
-// onClick = (e) => {
-//   let option = e.target.defaultValue;
-//   let answer = e.path[4].querySelectorAll("div")[4].textContent;
-//   let question = e.path[6].querySelector(".pt-1.disable-select").textContent;
-
-//   d = { question: question, answer: answer, option: option };
-
-//   console.log(d);
-// };
-
-// button = document.querySelectorAll("button")[4];
-// button.addEventListener('click',onClick)
 const AboutMeAvatar = () => {
   return (
     <Image

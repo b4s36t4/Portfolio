@@ -12,6 +12,7 @@
     "@apollo/client": "^3.4.8",
     "@mdx-js/loader": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
+    "@next/bundle-analyzer": "^11.1.0",
     "@next/mdx": "^11.1.0",
     "@tailwindcss/line-clamp": "^0.2.1",
     "dayjs": "^1.10.6",

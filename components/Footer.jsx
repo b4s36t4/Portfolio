@@ -2,10 +2,10 @@ import {
   AiFillGithub,
   AiFillLinkedin,
   AiFillTwitterCircle,
-} from "react-icons/ai";
+} from "react-icons/ai/index";
 import React, { useEffect } from "react";
 import HashNode from "./hashnode";
-import styles from "../../styles/Footer.module.css";
+import styles from "../styles/Footer.module.css";
 
 // console.log(styles);
 

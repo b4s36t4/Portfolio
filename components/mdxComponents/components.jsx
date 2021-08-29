@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { dracula as theme } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import styled, { css } from "styled-components";
-import { HiClipboard } from "react-icons/hi";
+import React from "react";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dark as theme } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import styled from "styled-components";
+import { HiClipboard } from "react-icons/hi/index";
+import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
+SyntaxHighlighter.registerLanguage("javascript", js);
 const h2 = styled.h2`
   font-size: 1.7rem;
   font-family: "Poppins", sans-serif;
@@ -34,7 +36,8 @@ const h3 = styled.h3`
   font-family: "Poppins", sans-serif;
   padding: 1.2rem 0;
   font-weight: 700;
-  & * , code {
+  & *,
+  code {
     font-size: 1.1rem;
     background-color: #eeb2b2;
     border-radius: 20px;
@@ -146,11 +149,11 @@ const code = (props) => {
           userSelect: "none",
           cursor: "pointer",
           borderBottomLeftRadius: 10,
-          display: 'flex',
-          alignItems:'center'
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <HiClipboard /> Copy
+        <HiClipboard size={25} />
       </p>
       <SyntaxHighlighter
         customStyle={{ borderRadius: 10, padding: "1rem" }}

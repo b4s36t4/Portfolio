@@ -1,17 +1,17 @@
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { Client } from "../client";
+import { Client } from "../../utils/client";
 import { gql } from "@apollo/client";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 // import Footer from '../components/Footer'
 import styles from "../../styles/Post.module.css";
-import * as components from "../components/mdxComponents/components";
-import * as _ from "lodash";
+import * as components from "../../components/mdxComponents/components";
+import capitalize from "lodash/capitalize";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
 import styled from "styled-components";
-import { FcLike } from "react-icons/fc";
+import { FcLike } from "react-icons/fc/index";
 
 const Like = styled.div`
   position: fixed;
@@ -24,7 +24,7 @@ const Like = styled.div`
   font-weight: 600;
   cursor: pointer;
   user-select: none;
-  transition: all 0.5s cubic-bezier(0.88,-0.03, 1, 1);
+  transition: all 0.5s cubic-bezier(0.88, -0.03, 1, 1);
 
   &:hover {
     transform: rotate(10deg) scale(1.1);
@@ -35,9 +35,8 @@ function Post({ post, content }) {
   const router = useRouter();
   return (
     <>
-      {console.log(post.coverImage)}
       <Head>
-        <title>Blog - {_.capitalize(post.title)}</title>
+        <title>Blog - {capitalize(post.title)}</title>
       </Head>
       <Header />
       <div className={styles.post}>
@@ -61,7 +60,6 @@ function Post({ post, content }) {
           />
         </div>
         <Like>
-          {" "}
           <FcLike size={40} /> Like{" "}
         </Like>
       </div>

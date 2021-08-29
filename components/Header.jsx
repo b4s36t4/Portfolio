@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import styles from "../../styles/Header.module.css";
+import styles from "../styles/Header.module.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 const Header = () => {
   const [mobile, setMobile] = useState(false);
