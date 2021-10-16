@@ -8,13 +8,16 @@ import {
 } from "react-icons/ai/index";
 import HashNode from "../components/hashnode";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { gql } from "@apollo/client";
-import { Client } from "../utils/client";
 import dayjs from "dayjs";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import path from "path";
+import { promises as fs } from "fs";
+import matter from "gray-matter";
+import { serialize } from "next-mdx-remote/serialize";
+import { MDXRemote } from "next-mdx-remote";
 
 const AboutMeDescription = () => {
   return (
@@ -78,8 +81,8 @@ const BlogPost = ({ title, posted, content, slug }) => {
               {title}
             </p>
           </span>
-          <span className="text-base line-clamp-3 h-20 py-3 break-normal overflow-hidden overflow-ellipsis w-auto">
-            <p>{content}</p>
+          <span className="text-base line-clamp-3 h-20 py-1 break-normal overflow-hidden overflow-ellipsis w-auto">
+            <MDXRemote {...content} lazy />
           </span>
           <p className="mt-3 text-sm">
             {dayjs(posted).format(`MMM-D-YYYY hh:mm A`)}
@@ -91,11 +94,11 @@ const BlogPost = ({ title, posted, content, slug }) => {
 };
 
 function Home({ posts }) {
+  const [postsIndex, setPostsIndex] = useState(3);
   useEffect(() => {
     if (window !== undefined) {
       window.dayjs = dayjs;
     }
-    console.log(posts);
   }, [posts]);
   return (
     <div className={styles.main}>
@@ -117,7 +120,7 @@ function Home({ posts }) {
           {posts &&
             posts.map(
               (post, index) =>
-                index < 3 && (
+                index < postsIndex && (
                   <BlogPost
                     key={post.title}
                     slug={post.slug}
@@ -129,38 +132,40 @@ function Home({ posts }) {
             )}
         </div>
       </div>
-      <div className={styles.loadMore}>
-        <p className="">Load More</p>
-      </div>
+      {posts && posts.length > postsIndex && (
+        <div
+          className={styles.loadMore}
+          onClick={() => setPostsIndex((postsIndex) => postsIndex + 3)}
+        >
+          <p className="">Load More</p>
+        </div>
+      )}
       <Footer />
       <ReactTooltip effect="solid" />
     </div>
   );
 }
 
-Home.getInitialProps = async (ctx) => {
-  const { data } = await Client.query({
-    query: gql`
-      # Write your query or mutation here
-      query {
-        user(username: "b4s36t4") {
-          username
-          numPosts
-          publication {
-            posts {
-              slug
-              title
-              contentMarkdown
-              dateAdded
-            }
-          }
-        }
-      }
-    `,
+export async function getStaticProps() {
+  const postDir = path.join(process.cwd(), "posts");
+  const postFiles = await fs.readdir(postDir);
+  const postsPromise = postFiles.map(async (file) => {
+    const grayMatter = matter.read(path.join(postDir, file));
+    const content = await serialize(grayMatter.content);
+    const post = {
+      title: grayMatter.data.title,
+      slug: grayMatter.data.slug,
+      contentMarkdown: content,
+      dateAdded: grayMatter.data.createdAt,
+    };
+    return post;
   });
-  // console.log(data.user.publication.posts)
-  const posts = data.user.publication.posts;
-  return { posts };
-};
+  const posts = await Promise.all(postsPromise);
+  return {
+    props: {
+      posts: posts,
+    },
+  };
+}
 
 export default Home;

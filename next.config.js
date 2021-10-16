@@ -13,5 +13,11 @@ module.exports = withBundleAnalyazer(
     images: {
       domains: ["cdn.hashnode.com"],
     },
+    webpack: (config, { isServer }) => {
+      if (!isServer) {
+        config.resolve.fallback.fs = false;
+      }
+      return config;
+    },
   })
 );

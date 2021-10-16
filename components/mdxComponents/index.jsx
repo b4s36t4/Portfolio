@@ -1,12 +1,13 @@
-import React from "react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark as theme } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import React, { useRef } from "react";
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vs2015 as theme } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import styled from "styled-components";
 import { HiClipboard } from "react-icons/hi/index";
-import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
+import js from "react-syntax-highlighter/dist/cjs/languages/hljs/javascript";
+import { AiFillCaretDown, AiFillCaretRight } from "react-icons/ai";
 SyntaxHighlighter.registerLanguage("javascript", js);
 const h2 = styled.h2`
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-family: "Poppins", sans-serif;
   padding: 1.2rem 0;
   font-weight: 700;
@@ -15,11 +16,12 @@ const h2 = styled.h2`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
 const h1 = styled.h1`
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-family: "Poppins", sans-serif;
   padding: 1.2rem 0;
   font-weight: 700;
@@ -28,6 +30,7 @@ const h1 = styled.h1`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
@@ -42,6 +45,7 @@ const h3 = styled.h3`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
@@ -55,6 +59,7 @@ const h4 = styled.h4`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
@@ -62,7 +67,7 @@ const InlineCode = styled.code`
   background-color: red;
 `;
 const x = styled(InlineCode)``;
-const p = styled.p`
+const StyledP = styled.p`
   font-size: 1.3rem;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
@@ -81,6 +86,7 @@ const p = styled.p`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
@@ -89,6 +95,7 @@ const a = styled.a`
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   position: relative;
+  width: fit-content;
 
   &::after {
     content: "";
@@ -121,6 +128,7 @@ const li = styled.li`
     background-color: #eeb2b2;
     border-radius: 20px;
     padding: 0.5rem;
+    font-family: "Poppins", sans-serif;
   }
 `;
 
@@ -133,10 +141,28 @@ const Copy = styled.div`
   position: relative;
   flex-direction: column;
 `;
-const code = (props) => {
-  const { language, children, ...rest } = props;
+const Code = (props) => {
+  const { className, children, ...rest } = props;
+  const lang = className.split("-")[1];
+  const [copied, setCopied] = React.useState(false);
+  const codeRef = useRef(null);
+  const doCopyToClipboard = async () => {
+    if (!navigator) {
+      return;
+    } else {
+      try {
+        const copied = await navigator.clipboard.writeText(
+          codeRef.current.innerText
+        );
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
   return (
-    <Copy>
+    <Copy ref={codeRef}>
       <p
         style={{
           position: "absolute",
@@ -151,13 +177,15 @@ const code = (props) => {
           borderBottomLeftRadius: 10,
           display: "flex",
           alignItems: "center",
+          fontWeight: "bold",
         }}
+        onClick={doCopyToClipboard}
       >
-        <HiClipboard size={25} />
+        {copied ? "Copied" : <HiClipboard size={25} />}
       </p>
       <SyntaxHighlighter
         customStyle={{ borderRadius: 10, padding: "1rem" }}
-        language={!language ? "javascript" : ""}
+        language={lang}
         style={theme}
       >
         {children}
@@ -166,16 +194,32 @@ const code = (props) => {
   );
 };
 
-// const code = styled.code`
-//   font-size: 1.1rem;
-//   background-color: #fa9090;
-//   padding: 0.5rem;
-// `;
-// const Code = (props) => {
-//   useEffect(() => {
-//     console.log(props);
-//   });
-//   return <div {...props}/>
-// };
+const FoldHead = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 0.4s ease-in-out;
+  user-select: none;
+  cursor: pointer;
+`;
 
-export { h2, p, h1, h3, h4, a, li, ul, code };
+const Fold = ({ text, children }) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <FoldHead onClick={() => setOpen(!open)}>
+      <div className="flex flex-col my-2 w-max items-start justify-center">
+        <div className="flex items-center">
+          {open ? <AiFillCaretDown /> : <AiFillCaretRight />}
+          <StyledP className="text-xl ml-2 text-gray-700">{text}</StyledP>
+        </div>
+        {open ? (
+          <div className="transition-all duration-200 ease-in-out">
+            {children}
+          </div>
+        ) : null}
+      </div>
+    </FoldHead>
+  );
+};
+
+export { h2, StyledP as p, h1, h3, h4, a, li, ul, Code, Fold };

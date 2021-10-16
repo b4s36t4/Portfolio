@@ -64,7 +64,7 @@ const Header = () => {
             <p>Home</p>
           </motion.span>
         </Link>
-        <Link href="/blog">
+        <Link href="/posts">
           <motion.span>
             <p>Blog</p>
           </motion.span>

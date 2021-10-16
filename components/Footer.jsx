@@ -6,6 +6,9 @@ import {
 import React, { useEffect } from "react";
 import HashNode from "./hashnode";
 import styles from "../styles/Footer.module.css";
+import dynamic from "next/dynamic";
+
+const ReactTooltip = dynamic(() => import("react-tooltip"), { ssr: false });
 
 // console.log(styles);
 
@@ -38,6 +41,7 @@ const Footer = () => {
           <AiFillTwitterCircle size={40} data-tip="b4s36t4" />
         </a>
       </div>
+      <ReactTooltip effect="solid" />
     </div>
   );
 };

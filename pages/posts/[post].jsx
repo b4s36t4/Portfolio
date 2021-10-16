@@ -1,17 +1,17 @@
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { Client } from "../../utils/client";
-import { gql } from "@apollo/client";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-// import Footer from '../components/Footer'
 import styles from "../../styles/Post.module.css";
-import * as components from "../../components/mdxComponents/components";
+import * as components from "../../components/mdxComponents";
 import capitalize from "lodash/capitalize";
-import { serialize } from "next-mdx-remote/serialize";
+// import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
+import path from "path";
 import styled from "styled-components";
-import { FcLike } from "react-icons/fc/index";
+import { RiHeart2Line, RiHeart2Fill } from "react-icons/ri/index";
+import matter from "gray-matter";
+import { serialize } from "next-mdx-remote/serialize";
 
 const Like = styled.div`
   position: fixed;
@@ -24,10 +24,10 @@ const Like = styled.div`
   font-weight: 600;
   cursor: pointer;
   user-select: none;
-  transition: all 0.5s cubic-bezier(0.88, -0.03, 1, 1);
+  transition: all 0.3s cubic-bezier(0.88, -0.03, 1, 1);
 
   &:hover {
-    transform: rotate(10deg) scale(1.1);
+    transform: rotate(1deg) scale(1.05);
   }
 `;
 
@@ -47,20 +47,15 @@ function Post({ post, content }) {
           <MDXRemote
             {...content}
             components={{
-              p: components.p,
-              h1: components.h1,
-              h2: components.h2,
-              h3: components.h3,
-              h4: components.h4,
-              a: components.a,
-              li: components.li,
-              ul: components.ul,
-              code: components.code,
+              ...components,
+              Fold: components.Fold,
+              code: components.Code,
             }}
+            scope={{ styled }}
           />
         </div>
         <Like>
-          <FcLike size={40} /> Like{" "}
+          <RiHeart2Line size={40} />
         </Like>
       </div>
       <Footer />
@@ -72,30 +67,15 @@ export default Post;
 
 export const getServerSideProps = async (ctx) => {
   const slug = ctx.query.post;
-  try {
-    const { data } = await Client.query({
-      query: gql`
-        query {
-            post(slug: "${slug}" ,hostname: "blog.maheshvagicherla.dev") {
-                title
-                contentMarkdown
-                dateAdded
-                coverImage
-            }
-        }
-        `,
-    });
-    const content = await serialize(data.post.contentMarkdown);
-    return {
-      props: {
-        post: data.post,
-        content: content,
-      },
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      notFound: true,
-    };
-  }
+  const file = path.join(process.cwd(), "posts", `${slug}.mdx`);
+  const parsed = matter.read(file);
+  const markdownContent = await serialize(parsed.content);
+  const post = {
+    title: parsed.data.title,
+    postedAt: parsed.data.createdAt,
+    tags: parsed.data.tags,
+  };
+  return {
+    props: { post: post, content: markdownContent },
+  };
 };
