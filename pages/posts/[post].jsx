@@ -70,10 +70,22 @@ function Post({ post, content, files }) {
 
 export default Post;
 
-export const getServerSideProps = async (ctx) => {
-  const slug = ctx.query.post;
+export const getStaticPaths = async () => {
+  const files = await fs.readdir(path.resolve(process.cwd(), "posts"));
+  const paths = files.map((file) => ({
+    params: {
+      post: file.split(".")[0],
+    },
+  }));
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
   const files = await fs.readdir(path.join(process.cwd(), "posts"));
-  const file = path.join(process.cwd(), "posts", `${slug}.mdx`);
+  const file = path.join(process.cwd(), "posts", `${params.post}.mdx`);
   console.log(file);
   const parsed = matter.read(file);
   const markdownContent = await serialize(parsed.content);
