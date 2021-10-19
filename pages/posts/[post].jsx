@@ -12,6 +12,8 @@ import styled from "styled-components";
 import { RiHeart2Line, RiHeart2Fill } from "react-icons/ri/index";
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
+import { promises as fs } from "fs";
+import { useEffect } from "react";
 
 const Like = styled.div`
   position: fixed;
@@ -31,8 +33,11 @@ const Like = styled.div`
   }
 `;
 
-function Post({ post, content }) {
+function Post({ post, content, files }) {
   const router = useRouter();
+  useEffect(() => {
+    console.log(files);
+  });
   return (
     <>
       <Head>
@@ -67,7 +72,9 @@ export default Post;
 
 export const getServerSideProps = async (ctx) => {
   const slug = ctx.query.post;
+  const files = await fs.readdir(path.join(process.cwd(), "posts"));
   const file = path.join(process.cwd(), "posts", `${slug}.mdx`);
+  console.log(file);
   const parsed = matter.read(file);
   const markdownContent = await serialize(parsed.content);
   const post = {
@@ -76,6 +83,6 @@ export const getServerSideProps = async (ctx) => {
     tags: parsed.data.tags,
   };
   return {
-    props: { post: post, content: markdownContent },
+    props: { post: post, content: markdownContent, files: files },
   };
 };
