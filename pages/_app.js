@@ -8,13 +8,15 @@ const ReactTooltip = dynamic(() => import("react-tooltip"), { ssr: false });
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Component {...pageProps}>
-      <main />
-      <Head>
-        <meta name="viewport"></meta>
-      </Head>
-      <ReactTooltip effect="solid" />
-    </Component>
+    <MDXProvider components={{ Fold: components.Fold }}>
+      <Component {...pageProps}>
+        <main />
+        <Head>
+          <meta name="viewport"></meta>
+        </Head>
+        <ReactTooltip effect="solid" />
+      </Component>
+    </MDXProvider>
   );
 }
 

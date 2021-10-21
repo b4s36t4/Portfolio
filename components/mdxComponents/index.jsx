@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { HiClipboard } from "react-icons/hi/index";
 import js from "react-syntax-highlighter/dist/cjs/languages/hljs/javascript";
 import { AiFillCaretDown, AiFillCaretRight } from "react-icons/ai";
+import { useSpring, animated } from "react-spring";
 SyntaxHighlighter.registerLanguage("javascript", js);
 const h2 = styled.h2`
   font-size: 1.5rem;

@@ -53,7 +53,7 @@ function Post({ post, content, files }) {
             {...content}
             components={{
               ...components,
-              Fold: components.Fold,
+              // Fold: components.Fold,
               code: components.Code,
             }}
             scope={{ styled }}
