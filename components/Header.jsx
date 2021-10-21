@@ -5,9 +5,9 @@ const Header = () => {
   const [mobile, setMobile] = useState(false);
   return (
     <div>
-      <div layout className={styles.menuButton}>
+      <div className={styles.menuButton}>
         {mobile ? (
-          <span layout>
+          <span>
             <svg
               layout={true}
               onClick={() => setMobile(!mobile)}
@@ -27,7 +27,7 @@ const Header = () => {
             </svg>
           </span>
         ) : (
-          <span layout>
+          <span>
             <svg
               layout={true}
               onClick={() => setMobile(!mobile)}
@@ -53,7 +53,7 @@ const Header = () => {
         transition={{ duration: "0.3s", type: "spring", bounce: 0.3 }}
         className={mobile ? styles.headerMobile : styles.header}
       >
-        <Link href="/">
+        <Link href="/" passHref>
           <span
             animate={{ opacity: [0.1, 0.3, 0.5, 0.7, 0.9, 1] }}
             transition={{ duration: 0.5 }}
@@ -61,17 +61,17 @@ const Header = () => {
             <p>Home</p>
           </span>
         </Link>
-        <Link href="/posts">
+        <Link href="/posts" passHref>
           <span>
             <p>Blog</p>
           </span>
         </Link>
-        <Link href="/projects">
+        <Link href="/projects" passHref>
           <span>
             <p>Projects</p>
           </span>
         </Link>
-        <Link href="/contact">
+        <Link href="/contact" passHref>
           <span>
             <p>Contact</p>
           </span>
