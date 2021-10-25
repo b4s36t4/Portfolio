@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import styles from "../styles/Projects.module.css";
 import Image from "next/image";
 import Footer from "../components/Footer";
+import { cloudflareLoader } from "../utils/loader";
 
 const ProjectTag = ({ text }) => {
   return <div className={styles.projectTag}>{text}</div>;
@@ -18,6 +19,7 @@ const Project = ({ left = true }) => {
             src="/Project1.png"
             alt="Project Image"
             layout="fill"
+            loader={cloudflareLoader}
           />
         </div>
       </a>

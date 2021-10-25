@@ -18,6 +18,7 @@ import { promises as fs } from "fs";
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
+import { cloudflareLoader } from "../utils/loader";
 
 const AboutMeDescription = () => {
   return (
@@ -65,6 +66,7 @@ const AboutMeAvatar = () => {
       width={280}
       height={280}
       quality={90}
+      loader={cloudflareLoader}
     />
   );
 };
