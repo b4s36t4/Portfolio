@@ -1,4 +1,13 @@
-example
+maheshvagicherla.dev {
+	encode gzip zstd
+	reverse_proxy 127.0.0.1:3000
+}
 
-encode gzip zstd
-reverse_proxy 127.0.0.1:3000
+www.maheshvagicherla.dev {
+	redir https://maheshvagicherla.dev
+}
+
+blog.maheshvagicherla.dev {
+	encode gzip zstd
+	reverse_proxy 127.0.0.1:3000
+}
