@@ -21,9 +21,6 @@ module.exports = withPreact(
         }
         return config;
       },
-      images: {
-        'loader':'static',
-      },
     })
   )
 );
